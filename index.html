@@ -155,6 +155,10 @@
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
         }
 
+        .download-btn:focus {
+            outline: none;
+        }
+
         .close-btn {
             background: #333333;
             color: #ffffff;
@@ -270,7 +274,8 @@
 
     <script>
         function generateAndShowQRCode() {
-            const url = document.getElementById("url").value.trim();
+            const urlInput = document.getElementById("url");
+            const url = urlInput.value.trim();
             if (url === "") {
                 alert("Please enter a valid URL.");
                 return;
@@ -315,6 +320,9 @@
                 const qrImage = qrCodeContainer.querySelector("canvas").toDataURL("image/png");
                 const downloadBtn = document.getElementById("downloadBtn");
                 downloadBtn.onclick = () => downloadQRCode(qrImage);
+
+                // Clear the URL input field without refreshing the page
+                urlInput.value = "";
             }, 500);
         }
 
