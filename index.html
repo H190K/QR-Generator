@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- Previous head content remains the same until the style tag -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -11,86 +12,131 @@
     <title>Generate QR Code</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <style>
-        @keyframes seamlessRainbow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        /* Previous styles remain the same until the download button styles */
+        :root {
+            --primary-bg: #13151a;
+            --secondary-bg: #1a1d25;
+            --accent-color: #3b82f6;
+            --text-primary: #ffffff;
+            --text-secondary: #9ca3af;
+            --input-bg: #2a2d37;
+            --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            text-align: center;
         }
 
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-            background-color: #1c1c1c;
-            color: #ffffff;
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
+            padding: 1rem;
         }
 
         .container {
-            text-align: center;
-            max-width: 600px;
+            background-color: var(--secondary-bg);
+            border-radius: 24px;
+            padding: 2.5rem;
             width: 100%;
-            border-radius: 15px;
-            background: #282828;
-            padding: 30px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            max-width: 500px;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        h1 {
-            font-size: 36px;
-            margin-bottom: 20px;
-            font-weight: 600;
-            color: #fff;
+        h1, h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, var(--text-primary), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            width: 100%;
+            text-align: center;
         }
 
-        input, button {
-            padding: 12px;
-            margin: 10px 0;
-            font-size: 18px;
-            border-radius: 12px;
-            border: none;
-            width: 80%;
+        .input-group {
+            margin-bottom: 1.5rem;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        input[type="text"] {
+            width: 100%;
             max-width: 400px;
-            transition: 0.3s ease-in-out;
+            padding: 1rem;
+            border: 2px solid var(--input-bg);
+            background-color: var(--input-bg);
+            color: var(--text-primary);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-align: center;
         }
 
-        input {
-            background-color: #333333;
-            color: #ffffff;
-            margin-bottom: 20px;
+        input[type="text"]:focus {
             outline: none;
-            border: 1px solid #444;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
-        input:focus {
-            background-color: #444444;
-            border-color: #0078ff;
+        .file-input-wrapper {
+            margin: 1.5rem 0;
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .file-input-wrapper label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--input-bg);
+            color: var(--text-primary);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .file-input-wrapper label:hover {
+            border-color: var(--accent-color);
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+
+        .file-input-wrapper input[type="file"] {
+            display: none;
         }
 
         button {
-            cursor: pointer;
-            background: linear-gradient(90deg, #00d4ff, #0078ff);
-            color: white;
-            border-radius: 20px;
-            padding: 15px 30px;
-            font-size: 16px;
-            text-transform: uppercase;
-            transition: 0.3s ease-in-out;
             width: 100%;
+            max-width: 400px;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent-color), #60a5fa);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
         button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px #00d4ff;
-        }
-
-        button:focus {
-            outline: none;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
         #popup {
@@ -98,18 +144,16 @@
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #282828;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px #0078ff;
-            text-align: center;
-            z-index: 1000;
-            width: 90%;
-            max-width: 400px;
+            transform: translate(-50%, -50%) scale(0.95);
+            background-color: var(--secondary-bg);
+            padding: 2rem;
+            border-radius: 24px;
+            box-shadow: var(--card-shadow);
+            max-width: 90%;
+            width: 400px;
             opacity: 0;
-            transform: translate(-50%, -50%) scale(0.9);
             transition: all 0.3s ease;
+            text-align: center;
         }
 
         #popup.show {
@@ -119,11 +163,68 @@
         }
 
         #qrcode {
-            margin: 20px auto;
-            display: inline-block;
-            background: #333333;
-            padding: 20px;
+            background-color: white;
+            padding: 1rem;
             border-radius: 12px;
+            margin: 1.5rem auto;
+            display: inline-block;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes glow {
+            0% {
+                box-shadow: 0 0 5px #ff6b6b,
+                           0 0 10px #ff6b6b,
+                           0 0 15px #4834d4;
+            }
+            50% {
+                box-shadow: 0 0 10px #ff6b6b,
+                           0 0 20px #ff6b6b,
+                           0 0 30px #4834d4;
+            }
+            100% {
+                box-shadow: 0 0 5px #ff6b6b,
+                           0 0 10px #ff6b6b,
+                           0 0 15px #4834d4;
+            }
+        }
+
+        .download-btn {
+            background: linear-gradient(-45deg, #ff6b6b, #4834d4, #4834d4, #ff6b6b);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite, glow 3s ease-in-out infinite;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            animation: gradient 3s ease infinite, glow 1.5s ease-in-out infinite;
+        }
+
+        .download-btn:active {
+            transform: translateY(1px);
+        }
+
+        .close-btn {
+            background: var(--input-bg);
+            color: var(--text-secondary);
         }
 
         #overlay {
@@ -131,145 +232,74 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            right: 0;
+            bottom: 0;
             background-color: rgba(0, 0, 0, 0.7);
-            z-index: 999;
-        }
-
-        .download-btn {
-            margin-top: 10px;
-            font-size: 18px;
-            padding: 10px 20px;
-            color: #ffffff;
-            border-radius: 25px;
-            border: none;
-            cursor: pointer;
-            background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff);
-            background-size: 400% 400%;
-            animation: seamlessRainbow 12s linear infinite;
-            transition: box-shadow 0.3s ease;
-        }
-
-        .download-btn:hover {
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
-        }
-
-        .download-btn:focus {
-            outline: none;
-        }
-
-        .close-btn {
-            background: #333333;
-            color: #ffffff;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            font-size: 12px;
-            width: 80px;
-            height: 30px;
-            margin-top: 10px;
-        }
-
-        .close-btn:hover {
-            background-color: #ff0000;
+            backdrop-filter: blur(4px);
         }
 
         .footer {
-            margin-top: 20px;
-            font-size: 14px;
+            margin-top: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            width: 100%;
+            text-align: center;
         }
 
-        .footer a {
-            color: #00d4ff;
+        .footer a, .contact a {
+            color: var(--accent-color);
             text-decoration: none;
-            font-weight: bold;
         }
 
-        .footer a:hover {
+        .footer a:hover, .contact a:hover {
             text-decoration: underline;
         }
 
         .contact {
-            font-size: 12px;
-            margin-top: 10px;
-            color: #00d4ff;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
         }
 
-        .contact a {
-            color: #00d4ff;
-            text-decoration: none;
-        }
-
-        .contact a:hover {
-            text-decoration: underline;
-        }
-
-        /* Custom file input styling */
-        .file-input-wrapper {
-            position: relative;
-            display: inline-block;
-            width: 80%;
-            max-width: 400px;
-            margin-bottom: 20px;
-        }
-
-        .file-input-wrapper input[type="file"] {
-            opacity: 0;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-        }
-
-        .file-input-wrapper label {
-            background-color: #333;
-            color: #fff;
-            padding: 12px 20px;
-            border-radius: 12px;
-            font-size: 18px;
+        canvas {
             display: block;
-            text-align: center;
-            cursor: pointer;
-            border: 1px solid #444;
-            transition: background-color 0.3s ease;
+            margin: 0 auto;
         }
-
-        .file-input-wrapper label:hover {
-            background-color: #444;
-        }
-
     </style>
 </head>
+<!-- Rest of the HTML remains exactly the same -->
 <body>
     <div class="container">
-        <h1>Generate QR Code</h1>
-        <input type="text" id="url" placeholder="Enter a URL" />
+        <h1>QR Code Generator</h1>
+        <div class="input-group">
+            <input type="text" id="url" placeholder="Enter your URL here" />
+        </div>
         <div class="file-input-wrapper">
-            <label for="logo">Choose Logo</label>
+            <label for="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" style="margin-right: 8px;" viewBox="0 0 16 16">
+                    <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                    <path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z"/>
+                </svg>
+                Choose Logo (Optional)
+            </label>
             <input type="file" id="logo" accept="image/*" />
         </div>
         <button onclick="generateAndShowQRCode()">Generate QR Code</button>
 
-        <div id="overlay"></div>
-        <div id="popup">
-            <h2>Your QR Code</h2>
-            <div id="qrcode"></div>
-            <button class="download-btn" id="downloadBtn">Download your QR code</button>
-            <button class="close-btn" onclick="closePopup()">Close</button>
-        </div>
-
         <div class="footer">
             <p>Created by <a href="https://twitter.com/h190k" target="_blank">H190K</a></p>
+            <div class="contact">
+                <p>Need help? <a href="mailto:info@h190k.com">Contact Us</a></p>
+            </div>
         </div>
+    </div>
 
-        <div class="contact">
-            <p>Need help? <a href="mailto:info@h190k.com">Contact Us</a></p>
-        </div>
+    <div id="overlay"></div>
+    <div id="popup">
+        <h2>Your QR Code</h2>
+        <div id="qrcode"></div>
+        <button class="download-btn" id="downloadBtn">Download QR Code</button>
+        <button class="close-btn" onclick="closePopup()">Close</button>
     </div>
 
     <script>
@@ -320,8 +350,6 @@
                 const qrImage = qrCodeContainer.querySelector("canvas").toDataURL("image/png");
                 const downloadBtn = document.getElementById("downloadBtn");
                 downloadBtn.onclick = () => downloadQRCode(qrImage);
-
-                // Clear the URL input field without refreshing the page
                 urlInput.value = "";
             }, 500);
         }
